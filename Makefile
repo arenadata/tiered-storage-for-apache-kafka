@@ -14,6 +14,7 @@
 # limitations under the License.
 ##
 VERSION := $(shell grep -o -E '^version=[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?' gradle.properties | cut -c9-)
+HDFS_VERSION := 3.3.6
 IMAGE_NAME := aivenoy/kafka-with-ts-plugin
 IMAGE_VERSION := latest
 IMAGE_TAG := $(IMAGE_NAME):$(IMAGE_VERSION)
@@ -28,33 +29,33 @@ clean:
 checkstyle:
 	./gradlew checkstyleMain checkstyleTest checkstyleIntegrationTest
 
-build: build/distributions/tiered-storage-for-apache-kafka-$(VERSION).tgz storage/s3/build/distributions/s3-$(VERSION).tgz storage/gcs/build/distributions/gcs-$(VERSION).tgz storage/azure/build/distributions/azure-$(VERSION).tgz
+build: build/distributions/tiered-storage-for-apache-kafka-$(VERSION).tgz storage/s3/build/distributions/s3-$(VERSION).tgz storage/gcs/build/distributions/gcs-$(VERSION).tgz storage/azure/build/distributions/azure-$(VERSION).tgz storage/hdfs/build/distributions/hdfs-$(VERSION).tgz
 
 build/distributions/tiered-storage-for-apache-kafka-$(VERSION).tgz:
-	./gradlew build distTar -x test -x integrationTest -x e2e:test
+	./gradlew build distTar -x test -x integrationTest -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 storage/s3/build/distributions/s3-$(VERSION).tgz:
-	./gradlew build :storage:s3:distTar -x test -x integrationTest -x e2e:test
+	./gradlew build :storage:s3:distTar -x test -x integrationTest -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 storage/gcs/build/distributions/gcs-$(VERSION).tgz:
-	./gradlew build :storage:gcs:distTar -x test -x integrationTest -x e2e:test
+	./gradlew build :storage:gcs:distTar -x test -x integrationTest -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 storage/azure/build/distributions/azure-$(VERSION).tgz:
-	./gradlew build :storage:azure:distTar -x test -x integrationTest -x e2e:test
+	./gradlew build :storage:azure:distTar -x test -x integrationTest -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 storage/hdfs/build/distributions/hdfs-$(VERSION).tgz:
-	./gradlew build :storage:hdfs:distTar -x test -x integrationTest -x e2e:test
+	./gradlew build :storage:hdfs:distTar -x test -x integrationTest -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 test: build
-	./gradlew test -x e2e:test
+	./gradlew test -x e2e:test -PhadoopVersion=$(HDFS_VERSION)
 
 integration_test: build
-	./gradlew integrationTest
+	./gradlew integrationTest -PhadoopVersion=$(HDFS_VERSION)
 
 E2E_TEST=LocalSystem
 
 e2e_test: build
-	./gradlew e2e:test --tests $(E2E_TEST)*
+	./gradlew e2e:test --tests $(E2E_TEST)* -PhadoopVersion=$(HDFS_VERSION)
 
 .PHONY: docker_image
 docker_image: build

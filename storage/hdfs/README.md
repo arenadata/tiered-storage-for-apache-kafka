@@ -1,5 +1,12 @@
 # HDFS Storage Backend
 
+Currently, `3.2.4` and `3.3.6` HDFS versions are supported. 
+The version of HDFS can be specified in the `hadoopVersion` property during project build, e.g.
+
+```shell
+./gradlew clean build testClasses -x test -x integrationTest -PhadoopVersion=3.3.6
+```
+
 ### Configuration
 
 | Name                                              | Type    | Default value | Description                                                                                                                                                                                                                                        |
