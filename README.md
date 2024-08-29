@@ -85,7 +85,11 @@ bin/kafka-producer-perf-test.sh \
 
 Step 5. After some time, you will start seeing segments on the remote storage, and later they will be deleted locally.
 
-## Design
+## Remote Metadata Storage Design
+
+See the [RemoteLogMetadataManager docs](docs/RemoteLogMetadataManager.md).
+
+## Remote Storage Design
 
 ### Requirements
 
