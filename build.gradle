@@ -138,6 +138,16 @@ subprojects {
         testcontainersFakeGcsServerVersion = "0.2.0"
 
         bucket4jVersion = "8.14.0"
+
+        skipSigning = project.hasProperty('skipSigning') && skipSigning.toBoolean()
+
+        mavenUrl = project.hasProperty('mavenUrl') ? project.mavenUrl : ''
+
+        mavenUsername = project.hasProperty('mavenUsername') ? project.mavenUsername : ''
+
+        mavenPassword = project.hasProperty('mavenPassword') ? project.mavenPassword : ''
+
+        shouldSign = !skipSigning && !version.endsWith("SNAPSHOT") && !version.contains("_arenadata")
     }
 
     dependencies {
@@ -236,13 +246,11 @@ subprojects {
     publishing {
         repositories {
             maven {
-                name="sonatype"
-
-                def releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots/"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
-                credentials(PasswordCredentials)
+                url = mavenUrl
+                credentials {
+                    username = mavenUsername
+                    password = mavenPassword
+                }
             }
         }
         publications {
@@ -288,23 +296,25 @@ subprojects {
             }
         }
 
-        signing {
-            sign publishing.publications.mavenJava
-            useGpgCmd()
-            // Some issue in the plugin:
-            // GPG outputs already armored signatures. The plugin also does armoring for `asc` files.
-            // This results in double armored signatures, i.e. garbage.
-            // Override the signature type provider to use unarmored output for `asc` files, which works well with GPG.
-            signatureTypes = new AbstractSignatureTypeProvider() {
-                {
-                    BinarySignatureType binary = new BinarySignatureType() {
-                        @Override
-                        String getExtension() {
-                            return "asc"
+        if (shouldSign) {
+            signing {
+                sign publishing.publications.mavenJava
+                useGpgCmd()
+                // Some issue in the plugin:
+                // GPG outputs already armored signatures. The plugin also does armoring for `asc` files.
+                // This results in double armored signatures, i.e. garbage.
+                // Override the signature type provider to use unarmored output for `asc` files, which works well with GPG.
+                signatureTypes = new AbstractSignatureTypeProvider() {
+                    {
+                        BinarySignatureType binary = new BinarySignatureType() {
+                            @Override
+                            String getExtension() {
+                                return "asc"
+                            }
                         }
+                        register(binary)
+                        setDefaultType(binary.getExtension())
                     }
-                    register(binary)
-                    setDefaultType(binary.getExtension())
                 }
             }
         }
