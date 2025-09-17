@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+plugins {
+    id 'com.gradleup.shadow' version '8.3.5'
+}
+
 archivesBaseName = "storage-s3"
 
 ext {
@@ -41,4 +45,9 @@ dependencies {
     integrationTestImplementation("org.wiremock:wiremock:$wireMockVersion") {
         exclude group: "org.slf4j"
     }
+}
+
+shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    mergeServiceFiles()
 }
