@@ -15,10 +15,10 @@
  */
 
 dependencies {
-    integrationTestImplementation "org.apache.kafka:kafka-clients:$kafkaVersion"
-    integrationTestImplementation "org.apache.kafka:kafka-server-common:$kafkaVersion"
-    integrationTestImplementation "org.apache.kafka:kafka-storage:$kafkaVersion"
-    integrationTestImplementation "org.apache.kafka:kafka-storage-api:$kafkaVersion"
+    integrationTestImplementation "io.arenadata.kafka:kafka-clients:$kafkaVersion"
+    integrationTestImplementation "io.arenadata.kafka:kafka-server-common:$kafkaVersion"
+    integrationTestImplementation "io.arenadata.kafka:kafka-storage:$kafkaVersion"
+    integrationTestImplementation "io.arenadata.kafka:kafka-storage-api:$kafkaVersion"
 
     integrationTestImplementation "commons-io:commons-io:$apacheCommonsIOVersion"
     integrationTestImplementation("software.amazon.awssdk:s3:$awsSdkVersion") {

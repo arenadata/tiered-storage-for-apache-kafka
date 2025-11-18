@@ -30,8 +30,8 @@ ext {
 
 dependencies {
     implementation project(':core')
-    implementation group: "org.apache.kafka", name: "kafka-storage-api", version: kafkaVersion
-    implementation group: "org.apache.kafka", name: "kafka-clients", version: kafkaVersion
+    implementation group: "io.arenadata.kafka", name: "kafka-storage-api", version: kafkaVersion
+    implementation group: "io.arenadata.kafka", name: "kafka-clients", version: kafkaVersion
 
     implementation "org.openjdk.jmh:jmh-core:$jmhVersion"
     implementation "org.openjdk.jmh:jmh-core-benchmarks:$jmhVersion"

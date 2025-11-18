@@ -86,7 +86,7 @@ dependencies {
     // Contains a bunch of catalog implementations.
     implementation "org.apache.iceberg:iceberg-core:$icebergVersion"
 
-    compileOnly "org.apache.kafka:kafka-storage:$kafkaVersion"
+    compileOnly "io.arenadata.kafka:kafka-storage:$kafkaVersion"
 
     implementation "org.apache.iceberg:iceberg-data:$icebergVersion"
     implementation "org.apache.iceberg:iceberg-aws:$icebergVersion"
